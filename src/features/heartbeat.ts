@@ -1,6 +1,7 @@
 // ping.ts
 import cron from "node-cron";
 import axios from "axios";
+import logger from "../utils/logger";
 
 // Type definition for the options
 interface PingOptions {
@@ -15,13 +16,13 @@ export const heartbeat = (options: PingOptions): void => {
   // Schedule the cron job based on the interval
   cron.schedule(`*/${intervalMinutes} * * * *`, async () => {
     try {
-      console.log(`Pinging server every ${intervalMinutes} minutes...`);
+      logger.info(`[heartbeat] Pinging server every ${intervalMinutes} minutes...`);
       const response = await axios.get(url);
-      console.log("Server responded with status:", response.status);
-    } catch (error) {
-      console.error("Error pinging server:", error);
+      logger.info(`[heartbeat] Server responded with status: ${response.status}`);
+    } catch (err) {
+      logger.error({ err }, `[heartbeat] Error pinging server`);
     }
   });
 
-  console.log(`Ping server started with a ${intervalMinutes}-minute interval to ${url}`);
+  logger.info(`[heartbeat] Ping server started with a ${intervalMinutes}-minute interval to ${url}`);
 };

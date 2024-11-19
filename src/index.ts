@@ -6,6 +6,7 @@ import authRoutes from "./api/auth";
 import gemsRoutes from "./api/gems";
 import openaiRoutes from "./api/openai";
 import { heartbeat } from "./features/heartbeat";
+import logger from "./utils/logger";
 
 const app = express();
 
@@ -46,5 +47,5 @@ app.listen(PORT, () => {
     });
   }
 
-  console.log(`Server is running on ${url}`);
+  logger.info(`Server is running on ${url}`);
 });

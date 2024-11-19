@@ -1,6 +1,10 @@
 import express, { Request, Response } from "express";
+import logger from "../utils/logger";
+import { authenticateToken } from "../middleware/auth";
 
 const router = express.Router();
+
+router.use(authenticateToken);
 
 const mockGems = [
   {
@@ -42,6 +46,7 @@ const mockGems = [
 ];
 
 router.get("/", (req: Request, res: Response) => {
+  logger.info("[gems] GET /gems");
   // Return all gems
   // call mongodb
   const gems = [...mockGems];
@@ -49,17 +54,20 @@ router.get("/", (req: Request, res: Response) => {
 });
 
 router.post("/", (req: Request, res: Response) => {
+  logger.info("[gems] POST /gems");
   const gems = req.body;
   res.json(gems);
 });
 
 router.put("/", (req: Request, res: Response) => {
+  logger.info("[gems] PUT /gems");
   const gems = req.body;
   res.json(gems);
 });
 
 router.delete("/:id", (req: Request, res: Response) => {
   const { id } = req.params;
+  logger.info(`[gems] DELETE /gems/${id}`);
   // Remove gem from array
   let gems = req.body;
   gems = gems.filter((gem: any) => gem._id !== id);

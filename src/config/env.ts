@@ -1,5 +1,7 @@
 import "dotenv/config";
 
+export const NODE_ENV = process.env.NODE_ENV || "development";
+export const LOG_LEVEL = process.env.LOG_LEVEL || "info";
 export const RENDER_SERVER_URL = process.env.RENDER_SERVER_URL || "";
 export const RENDER_CLIENT_URL = process.env.RENDER_CLIENT_URL || "";
 export const PROD = process.env.NODE_ENV === "production";

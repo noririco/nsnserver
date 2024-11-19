@@ -1,10 +1,11 @@
 import express, { Request, Response } from "express";
 import { OPENAI_API_KEY } from "../config/env";
+import logger from "../utils/logger";
 
 const router = express.Router();
 
 router.post("/completions", async (req: Request, res: Response) => {
-  console.log("Generating quote...");
+  logger.info("[openai] POST /openai/completions");
   // CAUTION that feature costs money
   // const prompt = "Generate list of an inspirational quotes. seperated by semicolon.";
   // const body = {

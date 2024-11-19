@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/env";
+import logger from "../utils/logger";
 
 const router = express.Router();
 
@@ -12,23 +13,27 @@ const users = [
 
 // Helper function to generate JWT token
 function generateToken(user: { email: string; role: string }) {
+  logger.debug({ user }, "[auth] Generating token");
   return jwt.sign({ email: user.email, role: user.role }, JWT_SECRET, { expiresIn: "1h" });
 }
 
 // Login route
 // add session ?
 router.post("/login", (req: Request, res: Response) => {
-  console.log(req.body);
   const { email, password } = req.body;
+  logger.debug({ email, password }, "[auth] Login request received");
   const user = users.find((u) => u.email === email && u.password === password);
 
   if (!user) {
+    logger.error({ email, password }, "[auth] Invalid credentials");
     res.status(401).json({ message: "Invalid username or password" });
     return;
   }
 
   // Access token, consider adding a refresh token
   const token = generateToken(user);
+
+  logger.info({ email }, "[auth] Login successful");
   res.json({ token, role: user.role });
 });
 
@@ -46,7 +51,7 @@ router.post("/login", (req: Request, res: Response) => {
 
 // If you’re using refresh tokens, making a logout call can signal the server to revoke any associated refresh tokens, ensuring the user cannot get a new access token once they've logged out.
 router.post("/logout", (req: Request, res: Response) => {
-  console.log("Logged out successfully");
+  logger.info("[auth] Logout request received");
   res.json({ message: "Logged out successfully" });
 });
 
