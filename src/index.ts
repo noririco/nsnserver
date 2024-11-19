@@ -41,7 +41,7 @@ app.listen(PORT, () => {
 
   if (PROD) {
     heartbeat({
-      intervalMinutes: 15,
+      intervalMinutes: 14,
       url,
     });
   }
