@@ -13,14 +13,14 @@ export const authenticateToken: RequestHandler = (req, res, next) => {
 
   if (!token) {
     logger.error("[authenticateToken] No token provided");
-    res.sendStatus(401);
+    res.status(401).json({ message: "Unauthorized: No token provided" });
     return;
   }
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) {
       logger.error({ err }, "[authenticateToken] Error verifying token");
-      res.sendStatus(403);
+      res.status(401).json({ message: "Unauthorized: Invalid token" });
       return;
     }
 
