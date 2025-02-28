@@ -5,6 +5,7 @@ import { PORT, PROD, RENDER_CLIENT_URL, RENDER_SERVER_URL } from "./config/env";
 import authRoutes from "./api/auth";
 import gemsRoutes from "./api/gems";
 import openaiRoutes from "./api/openai";
+import wikiRoutes from "./api/wikipedia";
 import { heartbeat } from "./features/heartbeat";
 import logger from "./utils/logger";
 
@@ -27,6 +28,7 @@ app.use(express.json());
 // Serve Angular static files
 // app.use(express.static(angularAppPath));
 
+app.use("/api/wiki", wikiRoutes);
 app.use("/api/openai", openaiRoutes);
 app.use("/api/gems", gemsRoutes);
 app.use("/api/auth", authRoutes);

@@ -1,2 +1,13 @@
 
 GET http://localhost:3000/api/gems HTTP/1.1
+
+###
+POST http://localhost:3000/api/gems HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Diamonde",
+  "content": "A precious Shakira shakira.",
+  "imageUrl": "http://example.com/images/diamond.jpg",
+  "type": "precious"
+}

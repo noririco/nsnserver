@@ -55,8 +55,19 @@ router.get("/", (req: Request, res: Response) => {
 
 router.post("/", (req: Request, res: Response) => {
   logger.info("[gems] POST /gems");
-  const gems = req.body;
-  res.json(gems);
+  const { title, content, imageUrl, type } = req.body;
+  const generateId = () => [...Array(24)].map(() => Math.floor(Math.random() * 16).toString(16)).join("");
+  const newGem = {
+    _id: generateId(),
+    title,
+    content,
+    imageUrl,
+    type,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+  mockGems.push(newGem);
+  res.json(mockGems);
 });
 
 router.put("/", (req: Request, res: Response) => {
@@ -65,13 +76,20 @@ router.put("/", (req: Request, res: Response) => {
   res.json(gems);
 });
 
+// DELETE a gem by ID
 router.delete("/:id", (req: Request, res: Response) => {
   const { id } = req.params;
   logger.info(`[gems] DELETE /gems/${id}`);
-  // Remove gem from array
-  let gems = req.body;
-  gems = gems.filter((gem: any) => gem._id !== id);
-  res.json(gems);
+  const index = mockGems.findIndex((gem) => gem._id === id);
+  if (index === -1) {
+    logger.warn(`[gems] Gem not found: ${id}`);
+    res.status(404).json({ error: "Gem not found" });
+    return;
+  }
+
+  mockGems.splice(index, 1);
+  logger.info(`[gems] Gem deleted: ${id}`);
+  res.json(mockGems);
 });
 
 export default router;
